@@ -92,7 +92,7 @@ if options.signal:
                         jetEtaCut = cms.double(2.5), #GenJet eta cut for HT
                         genHTcut = cms.double(options.filterHT) #genHT cut
                     )
-                    if hasattr(process,'ProductionFilterSequence'):
+                    if hasattr(process,'ProductionFilterSequence'): 
                         process.ProductionFilterSequence += process.pgen
                         process.ProductionFilterSequence += process.genHTFilter
     # gen filter settings
@@ -227,7 +227,7 @@ if hasattr(process,"mixData"):
 
 # miniAOD settings
 _pruned = ["prunedGenParticlesWithStatusOne","prunedGenParticles"]
-_keeps = ["keep (4900001 <= abs(pdgId) <= 4900991 )", "keep (51 <= abs(pdgId) <= 53)"]
+_keeps = ["keep (4900001 <= abs(pdgId) <= 4900991 )", "keep (51 <= abs(pdgId) <= 53)", "keep abs(pdgId) == 21 && abs(status) == 43"]
 if options.suep: 
     _keeps = ["keep 999998 <= abs(pdgId) <= 999999", "++keep  abs(pdgId) == 11 || abs(pdgId) == 13 || abs(pdgId) == 1 || abs(pdgId) == 211", "keep++ abs(pdgId) == 1" ]
     # keep dark pions, darkphotons 
