@@ -8,8 +8,8 @@ esac
 # defaults
 ACCESS=https
 WHICH_CMSSW=CMSSW_10_6_29_patch1
-FORK=cms-svj
-BRANCH=Run2_UL
+FORK=cesarecazzaniga
+BRANCH=SVJL_Run2_UL
 CORES=8
 HLT=""
 
