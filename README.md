@@ -4,7 +4,7 @@
 
 All of the necessary setup (including checkout of this repo, dependencies, and CMSSW compilation) is performed by [setup.sh](./setup.sh).
 
-For Run 2 ultra-legacy MC production (2016APV, 2016, 2017, 2018), `CMSSW_10_6_29_patch1` is used.
+For Run 2 ultra-legacy MC production for ```fully hadronic SVJs``` (2016APV, 2016, 2017, 2018), `CMSSW_10_6_29_patch1` is used.
 ```
 wget https://raw.githubusercontent.com/cms-svj/SVJProduction/Run2_UL/setup.sh
 chmod +x setup.sh
@@ -13,6 +13,28 @@ cd CMSSW_10_6_29_patch1/src
 cmsenv
 cd SVJ/Production
 ```
+
+
+For Run 2 ultra-legacy MC production for ```SVJL``` (2016APV, 2016, 2017, 2018), `CMSSW_10_6_29_patch1` is used.
+```
+wget https://github.com/cesarecazzaniga/SVJProduction/blob/SVJL_Run2_UL/setup.sh
+chmod +x setup.sh
+./setup.sh
+cd CMSSW_10_6_29_patch1/src
+cmsenv
+cd SVJ/Production
+```
+
+For Run 2 ultra-legacy MC production for ```SVJtau``` (2016APV, 2016, 2017, 2018), `CMSSW_10_6_29_patch1` is used.
+```
+wget https://github.com/cesarecazzaniga/SVJProduction/blob/SVJtau_Run2_UL/setup.sh
+chmod +x setup.sh
+./setup.sh
+cd CMSSW_10_6_29_patch1/src
+cmsenv
+cd SVJ/Production
+```
+
 
 The setup script has several options:
 * `-c [release]`: CMSSW release to install (default = CMSSW_10_6_29_patch1)
