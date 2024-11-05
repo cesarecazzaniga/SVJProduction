@@ -29,5 +29,5 @@ if [ -z "$YEAR" ] || [ -z "$NJOBS" ]; then
 fi
 
 (set -x;
-python runProd.py -P P8 -G="-p -d signals_P8_ex_svjl_test --svjl 1 -E 1000 -N 1 --cpus 4 --memory 8000 --args 'quiet=1 syst=1'" -y 2017 -n chain2017_ -o root://storage01.lcg.cscs.ch:1096//pnfs/lcg.cscs.ch/cms/trivcat/store/user/cazzanig//darkshowers/samples/cms_offline/mini_aod/svjl/UL17_SVJL_private_prod_scan/ -t root://storage01.lcg.cscs.ch:1096//pnfs/lcg.cscs.ch/cms/trivcat/store/user/cazzanig//darkshowers/samples/cms_offline/mini_aod/svjl/UL17_SVJL_private_prod_scan/ -c -s
+python runProd.py -P P8 -G="-p -d signals_P8_ex_svjl_1 --svjl 1 -E 1000 -N 1 --cpus 4 --memory 8000 --args 'quiet=1 syst=1'" -y 2017 -n chain2017_ -o root://storage01.lcg.cscs.ch:1096//pnfs/lcg.cscs.ch/cms/trivcat/store/user/cazzanig//darkshowers/samples/cms_offline/mini_aod/svjl/UL17_SVJL_private_prod_scan/ -t root://storage01.lcg.cscs.ch:1096//pnfs/lcg.cscs.ch/cms/trivcat/store/user/cazzanig//darkshowers/samples/cms_offline/mini_aod/svjl/UL17_SVJL_private_prod_scan/ -c -s
 )
