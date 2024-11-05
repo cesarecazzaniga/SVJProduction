@@ -12,6 +12,8 @@ class jobSubmitterSVJ(jobSubmitter):
     def __init__(self,argv=None,parser=None):
         super(jobSubmitterSVJ,self).__init__(argv,parser)
 
+        print("SVJL option: ", self.svjl)
+
         if self.suep:
             self.helper = suepHelper()
         else:
@@ -137,9 +139,9 @@ class jobSubmitterSVJ(jobSubmitter):
                 if self.suep:
                     self.helper.setModel(pdict["mMediator"],pdict["mDark"],pdict["temperature"],pdict["decay"])
                 if self.svjl:
-                    self.helper.setModel(channel=pdict["channel"],svjl=pdict["svjl"],mMediator=pdict["mMediator"],mDark=pdict["mDark"] if "mDark" in pdict else None,mPseudo=pdict["mPseudo"],mVector=pdict["mVector"],rinv=pdict["rinv"],alpha=pdict["alpha"],mPiOverLambda=pdict["mPiOverLambda"] if "mPiOverLambda" in pdict else None,lambdaHV=pdict["lambdaHV"] if "lambdaHV" in pdict else None ,boost=pdict["boost"] if "boost" in pdict else 0.0, boostvar=pdict["boostvar"] if "boostvar" in pdict else None, generate=not (self.madgraph or self.gridpack),yukawa=pdict["yukawa"] if "yukawa" in pdict else None, nMediator=pdict["nMediator"] if "nMediator" in pdict else None, sepproc=pdict["sepproc"] if "sepproc" in pdict else None )
+                    self.helper.setModel(channel=pdict["channel"],svjl=pdict["svjl"],mMediator=pdict["mMediator"],mDark=pdict["mDark"] if "mDark" in pdict else None,mPseudo=pdict["mPseudo"],mVector=pdict["mVector"],rinv=pdict["rinv"],alpha=pdict["alpha"],mPiOverLambda=pdict["mPiOverLambda"] if "mPiOverLambda" in pdict else None,lambdaHV=pdict["lambdaHV"] if "lambdaHV" in pdict else None ,boost=pdict["boost"] if "boost" in pdict else 0.0, boostvar=pdict["boostvar"] if "boostvar" in pdict else None, generate=not (self.madgraph or self.gridpack),BRtau=pdict["BRtau"] if "BRtau" in pdict else None,yukawa=pdict["yukawa"] if "yukawa" in pdict else None, nMediator=pdict["nMediator"] if "nMediator" in pdict else None, sepproc=pdict["sepproc"] if "sepproc" in pdict else None )
                 else:    
-                    self.helper.setModel(channel=pdict["channel"],svjl=pdict["svjl"] if "svjl" in pdict else None, mMediator=pdict["mMediator"],mDark=pdict["mDark"],mPseudo=pdict["mPseudo"] if "mPseudo" in pdict else None,mVector=pdict["mVector"] if "mVector"in pdict else None,rinv=pdict["rinv"],alpha=pdict["alpha"],mPiOverLambda=pdict["mPiOverLambda"] if "mPiOverLambda" in pdict else None,lambdaHV=pdict["lambdaHV"] if "lambdaHV" in pdict else None,boost=pdict["boost"] if "boost" in pdict else 0.0, boostvar=pdict["boostvar"] if "boostvar" in pdict else None ,generate=not (self.madgraph or self.gridpack),yukawa=pdict["yukawa"] if "yukawa" in pdict else None, nMediator=pdict["nMediator"] if "nMediator" in pdict else None , sepproc=pdict["sepproc"] if "sepproc" in pdict else None )
+                    self.helper.setModel(channel=pdict["channel"],svjl=pdict["svjl"] if "svjl" in pdict else None, mMediator=pdict["mMediator"],mDark=pdict["mDark"],mPseudo=pdict["mPseudo"] if "mPseudo" in pdict else None,mVector=pdict["mVector"] if "mVector"in pdict else None,rinv=pdict["rinv"],alpha=pdict["alpha"],mPiOverLambda=pdict["mPiOverLambda"] if "mPiOverLambda" in pdict else None,lambdaHV=pdict["lambdaHV"] if "lambdaHV" in pdict else None,boost=pdict["boost"] if "boost" in pdict else 0.0, boostvar=pdict["boostvar"] if "boostvar" in pdict else None ,generate=not (self.madgraph or self.gridpack),BRtau=pdict["BRtau"] if "BRtau" in pdict else None,yukawa=pdict["yukawa"] if "yukawa" in pdict else None, nMediator=pdict["nMediator"] if "nMediator" in pdict else None , sepproc=pdict["sepproc"] if "sepproc" in pdict else None )
                 outpre = self.outpre
                 inpre = self.inpre
                 signal = True
@@ -185,7 +187,7 @@ class jobSubmitterSVJ(jobSubmitter):
 
                     elif self.svjl:
                         arglist = [
-                            "channel="+str(pdict["channel"]),                                                                                                                                                                        
+                            "channel="+str(pdict["channel"]),                                                                                                                                                                 
                             "svjl=1",
                             "mMediator="+str(pdict["mMediator"]),
                             "mPseudo="+str(pdict["mPseudo"]), 
@@ -193,6 +195,8 @@ class jobSubmitterSVJ(jobSubmitter):
                             "rinv="+str(pdict["rinv"]),
                             "lambdaHV="+str(pdict["lambdaHV"]),
                             "mPiOverLambda="+str(pdict["mPiOverLambda"]),
+                            #if "BRtau" in pdict:
+                            "BRtau="+str(pdict["BRtau"]),
                             "alpha="+str(pdict["alpha"]),  
                         ]            
                         for extra in svj_extras+["filterZ2"]:

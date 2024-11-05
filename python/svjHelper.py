@@ -181,12 +181,21 @@ class svjHelper(object):
     # n_c = HiddenValley:Ngauge, n_f = HiddenValley:nFlav
     # see also TimeShower.cc in Pythia8, PDG chapter 9 (Quantum chromodynamics), etc.
 
-    # Calculation of rho mass from Lattice QCD fits (arXiv:2203.09503v2)
-    def calcLatticePrediction(self,mPiOverLambda,mPseudo):        
-        mVectorOvermPseudo = (1.0/mPiOverLambda)*math.pow(5.76 + 1.5*math.pow(mPiOverLambda,2) ,0.5) 
+#    def calcLatticePrediction(self,mPiOverLambda,mPseudo):        
+#        df_lattice_calc = pd.read_csv(os.getcwd()+'/data/A_prime_portal/'+'mpi_mrho_lattice.txt', sep=';', decimal=",")
+#        x = np.array(df_lattice_calc['m_pi'])
+#        y= np.array(df_lattice_calc['m_rho'])
+#        gr = rt.TGraph( 93, x, y )
+#        spl = rt.TSpline3('spline',gr)
+#        mVector= spl.Eval(mPiOverLambda)*mPseudo
+
+#        return mVector
+
+    # Calculation of rho mass from Lattice QCD fits (arXiv:2203.09503v2)                                                                                                                                     
+    def calcLatticePrediction(self,mPiOverLambda,mPseudo):
+        mVectorOvermPseudo = (1.0/mPiOverLambda)*math.pow(5.76 + 1.5*math.pow(mPiOverLambda,2) ,0.5)
         mVector = mVectorOvermPseudo*mPseudo
         return mVector
-
 
     def calcAlpha(self,lambdaHV):
         return math.pi/(self.b0*math.log(1000/lambdaHV))
@@ -199,10 +208,10 @@ class svjHelper(object):
         # check for issues
         if channel!="s" and channel!="t": raise ValueError("Unknown channel: "+channel)
         # store the basic parameters
-        print("option svjl: ", svjl)
         self.channel = channel
         self.mg_name = "DMsimp_SVJ_s_spin1" if channel=="s" else "DMsimp_SVJ_t" if channel=="t" else ""
         self.generate = generate
+        self.mMediator = mMediator
         self.mMediator = mMediator
         self.svjl = svjl
         if not svjl:
@@ -213,6 +222,9 @@ class svjHelper(object):
              self.lambdaHV = lambdaHV
              self.mPseudo = self.mPiOverLambda * self.lambdaHV
              self.mVector = self.calcLatticePrediction(self.mPiOverLambda,self.mPseudo)
+             self.BRtau = BRtau
+#             self.mPseudo = mPseudo
+#             self.mVector = mVector
         self.rinv = rinv
         if isinstance(alpha,str) and alpha[0].isalpha(): self.setAlpha(alpha,svjl,lambdaHV)
         else: self.alpha = float(alpha)
@@ -231,6 +243,7 @@ class svjHelper(object):
 
             self.yukawa = yukawa
             if self.yukawa is None: raise ValueError("yukawa value must be provided for madgraph t-channel")
+
 
         # boosting
         allowed_boostvars = ["pt","madpt"]
@@ -280,12 +293,20 @@ class svjHelper(object):
                 ("channel", "{}-channel".format(self.channel)),
             ]
             if self.nMediator is not None: params.append(("nMediator", "nMed-{:g}".format(self.nMediator)))
-            params.extend([
+            if not self.svjl:
+                 params.extend([
                 ("mMediator", "mMed-{:g}".format(self.mMediator)),
-                ("mDark", "mDark-{:g}".format(self.mPseudo)),
+                ("mDark", "mDark-{:g}".format(self.mDark)),
                 ("rinv", "rinv-{:g}".format(self.rinv)),
                 ("alpha", "alpha-{}".format(self.alphaName) if len(self.alphaName)>0 else "alpha-{:g}".format(self.alpha)),
             ])
+            else:
+                params.extend([
+                ("mMediator", "mMed-{:g}".format(self.mMediator)),
+                ("mDark", "mDark-{:g}".format(self.mPseudo)),
+                ("rinv", "rinv-{:g}".format(self.rinv)),
+                ("alpha", "alpha-{}".format(self.BRtau)),
+                ])
             if self.yukawa is not None: _outname += "_yukawa-{:g}".format(self.yukawa)
             if self.boost>0: _outname += "_{}{:g}".format(self.boostvar.upper(),self.boost)
             not_for_gridpack = ["rinv","alpha"]
@@ -307,6 +328,7 @@ class svjHelper(object):
             _outname = _outname.replace("-","_").replace(".","p")
 
         return _outname
+
 
     # allow access to all xsecs
     def getPythiaXsec(self,mMediator):
@@ -361,6 +383,24 @@ class svjHelper(object):
                 else:
                     theLeptons[il].bf = 0.0        
 
+        elif type=="Taus_effective":
+            bfLeptons = (1.0-self.rinv)*self.BRtau
+            bfQuarks = (1.0-self.rinv)*(1.0 - self.BRtau)
+            for iq,q in enumerate(theQuarks):
+                print("quarks idx",iq)
+                if (iq == 3):
+                    theQuarks[iq].bf = bfQuarks
+                else:
+                    theQuarks[iq].bf = 0.0
+
+            for il,l in enumerate(theLeptons):
+                print("leptons idx",il)
+                if (il == 2):
+                    theLeptons[il].bf = bfLeptons
+                else:
+                    theLeptons[il].bf = 0.0
+
+
         elif type=="Taus_only":
             bfLeptons = (1.0-self.rinv)
             for iq,q in enumerate(theQuarks):
@@ -381,11 +421,11 @@ class svjHelper(object):
         else:
             raise ValueError("unknown visible decay type: "+type)
             
-            lines = []
+        lines = []
 
         if (type=="democratic" or type=="massInsertion"):
             lines = ['{:d}:addChannel = 1 {:g} 91 {:d} -{:d}'.format(mesonID,q.bf,q.id,q.id) for q in theQuarks if q.bf>0]
-        if (type=="Taus_democratic" or type=="Taus_only"):
+        if (type=="Taus_democratic" or type=="Taus_only" or  type=="Taus_effective"):
             # lines for decays to quarks                                                                                                                    
             lines_leptons = ['{:d}:addChannel = 1 {:g} 91 {:d} -{:d}'.format(mesonID,q.bf_scaled,q.id,q.id) for q in theQuarks if q.bf>0]
             # lines for decays to leptons                                                                                                
@@ -412,7 +452,7 @@ class svjHelper(object):
          sm_particle.bf = sm_particle.color*sm_particle.charge**2*self.mVector*np.sqrt(1.0-4.0*sm_particle.mass**2/self.mVector**2)*(1+2*sm_particle.mass**2/self.mVector**2) / total_width    
 
 
-    #this is a simplified implementation - needs improvements (for now democratic decays into all leptons generations)
+    #this is a simplified implementation - needs improvements     
 
     def scale_branchings2rinv(self,theQuarks,theLeptons):
 
@@ -439,8 +479,7 @@ class svjHelper(object):
         theQuarks[4].bf_scaled = Br_b_rho
 
 
-
-#### Added vector meson visible decay from A': from S. Knapen dark shower code (possible mass insertion ? - verify)
+#### Needs to be added vector meson visible decay from A': from S. Knapen dark shower code
     def vector_visibleDecay(self,type,mesonID,dmID):
         
         theQuarks = self.quarks_vector.get()
@@ -628,13 +667,11 @@ class svjHelper(object):
 
         else:         
             lines_decay += self.invisibleDecay(4900111,51)
-            lines_decay += self.pseudo_scalar_visibleDecay("massInsertion",4900111,51)
+            lines_decay += self.pseudo_scalar_visibleDecay("Taus_effective",4900111,51)
             lines_decay += self.invisibleDecay(4900211,51)
-            lines_decay += self.pseudo_scalar_visibleDecay("massInsertion",4900211,51)
-            lines_decay += self.invisibleDecay(4900113,53)
-            lines_decay += self.vector_visibleDecay("A-MediatedSimple",4900113,53)
-            lines_decay += self.invisibleDecay(4900213,53)
-            lines_decay += self.vector_visibleDecay("A-MediatedSimple",4900213,53)
+            lines_decay += self.pseudo_scalar_visibleDecay("Taus_effective",4900211,51)
+            lines_decay += self.vector_internalDecay("Internal_simple",4900113)
+            lines_decay += self.vector_internalDecay("Internal_simple",4900213)
             
 
         lines = []
@@ -658,6 +695,7 @@ class svjHelper(object):
         ]
 
         return lines
+
 
     def getMadGraphCards(self,base_dir,lhaid,events=1,cores=1):
         if base_dir[-1]!='/': base_dir = base_dir+'/'
@@ -715,3 +753,4 @@ class svjHelper(object):
             )
 
         return mg_model_dir, mg_input_dir
+

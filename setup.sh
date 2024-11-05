@@ -9,7 +9,7 @@ esac
 ACCESS=https
 WHICH_CMSSW=CMSSW_10_6_29_patch1
 FORK=cesarecazzaniga
-BRANCH=SVJL_Run2_UL
+BRANCH=SVJtau_Run2_UL
 CORES=8
 HLT=""
 
