@@ -1,0 +1,40 @@
+BExecuting job0 (jobExecCondor_step_RECO-MINIAOD_s-channel_mMed-3000_mDark-8_rinv-0.3_alpha-peak_13TeV-pythia8_n-10)
+E1;95;0cxecuting step1.sh
+
+Starting job on Thu Jan 12 10:30:24 CET 2023
+Running on Linux b7g21p2078.cern.ch 3.10.0-1160.76.1.el7.x86_64 #1 SMP Wed Aug 10 16:21:17 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+System release CentOS Linux release 7.9.2009 (Core)
+CMSSW on Condor
+
+parameter set:
+CMSSWVER: CMSSW_10_6_29_patch1
+CMSSWXRD: root://eoscms.cern.ch//store/group/phys_jetmet/cazzanig/testMC/
+
+Getting CMSSW via xrdcp
+Resetting caches
+Done: ProjectRename
+
+Executing step2.sh
+
+parameter set:
+OUTDIR:     root://eoscms.cern.ch//store/group/phys_jetmet/cazzanig/testMC//RECO-MINIAOD
+JOBNAME:    step_RECO-MINIAOD_s-channel_mMed-3000_mDark-8_rinv-0.3_alpha-peak_13TeV-pythia8_n-10
+PART:       1
+REDIR:      
+MODE:       
+
+cmsRun runSVJ.py channel=s svjl=1 mMediator=3000 mPseudo=8.0 mVector=15 rinv=0.3 alpha=peak maxEvents=10 outpre=step_RECO-MINIAOD year=2018 config=step_RECO-MINIAOD indir=root://eoscms.cern.ch//store/group/phys_jetmet/cazzanig/testMC/ threads=4 redir=root://cmseos.fnal.gov/ part=1 2>&1
+selected signal: SVJ !
+----- Begin Fatal Exception 12-Jan-2023 10:30:30 CET-----------------------
+An exception of category 'ConfigFileReadError' occurred while
+   [0] Processing the python configuration file named runSVJ.py
+Exception Message:
+ unknown python problem occurred.
+ImportError: No module named step_RECO-MINIAOD
+
+At:
+  runSVJ.py(26): <module>
+
+----- End Fatal Exception -------------------------------------------------
+exit code 90, skipping xrdcp
+job0 (jobExecCondor_step_RECO-MINIAOD_s-channel_mMed-3000_mDark-8_rinv-0.3_alpha-peak_13TeV-pythia8_n-10) failed (exit code 90)

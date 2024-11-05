@@ -12,6 +12,7 @@ options.register("madgraph", False, VarParsing.multiplicity.singleton, VarParsin
 options.register("nogridpack", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
 options.register("syst", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
 options.register("suep", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
+options.register("svjl", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
 options.register("channel", "s", VarParsing.multiplicity.singleton, VarParsing.varType.string)
 options.register("boost", 0.0, VarParsing.multiplicity.singleton, VarParsing.varType.float)
 options.register("boostvar", "madpt", VarParsing.multiplicity.singleton, VarParsing.varType.string)
@@ -19,6 +20,13 @@ options.register("mingenjetpt", 0.0, VarParsing.multiplicity.singleton, VarParsi
 options.register("mMediator", 3000.0, VarParsing.multiplicity.singleton, VarParsing.varType.float)
 options.register("mDark", 20.0, VarParsing.multiplicity.singleton, VarParsing.varType.float)
 options.register("rinv", 0.3, VarParsing.multiplicity.singleton, VarParsing.varType.float)
+#new SVJL parameters
+options.register("mPiOverLambda", 1.6, VarParsing.multiplicity.singleton, VarParsing.varType.float)
+options.register("lambdaHV", 5.0, VarParsing.multiplicity.singleton, VarParsing.varType.float)
+options.register("mPseudo", 8.0, VarParsing.multiplicity.singleton, VarParsing.varType.float)
+options.register("mVector", 15.37, VarParsing.multiplicity.singleton, VarParsing.varType.float)
+options.register("BRtau", 0.5, VarParsing.multiplicity.singleton, VarParsing.varType.float)
+###################
 options.register("alpha", "peak", VarParsing.multiplicity.singleton, VarParsing.varType.string)
 options.register("yukawa", 1.0, VarParsing.multiplicity.singleton, VarParsing.varType.float)
 options.register("nMediator", -1, VarParsing.multiplicity.singleton, VarParsing.varType.int)
@@ -37,7 +45,6 @@ options.register("output", "", VarParsing.multiplicity.list, VarParsing.varType.
 options.register("year", "", VarParsing.multiplicity.singleton, VarParsing.varType.string)
 options.register("config", "step_GEN", VarParsing.multiplicity.singleton, VarParsing.varType.string)
 options.register("maxEventsIn", -1, VarParsing.multiplicity.singleton, VarParsing.varType.int)
-options.register("useFolders", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
 options.register("printEvents", 1, VarParsing.multiplicity.singleton, VarParsing.varType.int)
 options.register("quiet", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
 options.register("threads", 1, VarParsing.multiplicity.singleton, VarParsing.varType.int)
@@ -81,11 +88,11 @@ elif len(options.fragment)>0:
     if len(options.inpre)>0: options.inpre += "_"+options.fragment
 
 if options.suep:
-    # change default
-    if options.channel=='s': options.channel = 'ggH'
     _helper = suepHelper()
-    _helper.setModel(options.channel,options.mMediator,options.mDark,options.temperature,options.decay)
+    _helper.setModel(options.mMediator,options.mDark,options.temperature,options.decay)
     options.filterZ2 = False
+    options.channel = ""
 else:
-    _helper = svjHelper()
-    _helper.setModel(options.channel,options.mMediator,options.mDark,options.rinv,options.alpha,generate=None if options.scan else not options.madgraph,boost=options.boost,boostvar=options.boostvar,yukawa=options.yukawa,nMediator=options.nMediator,sepproc=options.sepproc)
+    print("selected signal: SVJ !")
+    _helper = svjHelper(options.svjl)
+    _helper.setModel(options.channel,options.svjl,options.mMediator,options.mDark,options.mPseudo,options.mVector,options.rinv,options.alpha,options.mPiOverLambda,options.lambdaHV,generate=None if options.scan else not options.madgraph,boost=options.boost,boostvar=options.boostvar,BRtau=options.BRtau,yukawa=options.yukawa,nMediator=options.nMediator,sepproc=options.sepproc)
