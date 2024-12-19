@@ -35,6 +35,16 @@ cmsenv
 cd SVJ/Production
 ```
 
+For Run 2 ultra-legacy MC production for ```SVJGamma``` (2016APV, 2016, 2017, 2018), `CMSSW_10_6_29_patch1` is used.
+```
+wget https://github.com/cesarecazzaniga/SVJProduction/blob/SVJGamma_Run2_UL/setup.sh
+chmod +x setup.sh
+./setup.sh
+cd CMSSW_10_6_29_patch1/src
+cmsenv
+cd SVJ/Production
+```
+
 
 The setup script has several options:
 * `-c [release]`: CMSSW release to install (default = CMSSW_10_6_29_patch1)
