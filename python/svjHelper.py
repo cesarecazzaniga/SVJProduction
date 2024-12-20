@@ -99,7 +99,7 @@ class quarklist(object):
 
 
 class svjHelper(object):
-    def __init__(self,svjl):
+    def __init__(self,svjgamma):
         with open(os.path.join(os.path.expandvars('$CMSSW_BASE'),'src/SVJ/Production/test/dict_xsec_Zprime.txt'),'r') as xfile:
             self.xsecs = {int(xline.split('\t')[0]): float(xline.split('\t')[1]) for xline in xfile}
         self.quarks_pseudo = quarklist()

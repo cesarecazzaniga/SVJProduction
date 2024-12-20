@@ -12,7 +12,7 @@ options.register("madgraph", False, VarParsing.multiplicity.singleton, VarParsin
 options.register("nogridpack", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
 options.register("syst", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
 options.register("suep", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
-options.register("svjgammma", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
+options.register("svjgamma", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
 options.register("channel", "s", VarParsing.multiplicity.singleton, VarParsing.varType.string)
 options.register("boost", 0.0, VarParsing.multiplicity.singleton, VarParsing.varType.float)
 options.register("boostvar", "madpt", VarParsing.multiplicity.singleton, VarParsing.varType.string)
@@ -97,4 +97,4 @@ if options.suep:
 else:
     print("selected signal: SVJGamma !")
     _helper = svjHelper(options.svjgamma)
-    _helper.setModel(options.channel,options.svjl,options.mMediator,options.mDark,options.mPseudo,options.mVector,options.rinv,options.alpha,options.mPiOverLambda,options.lambdaHV,BRGamma=options.BRGamma,generate=None if options.scan else not options.madgraph,boost=options.boost,boostvar=options.boostvar,yukawa=options.yukawa,nMediator=options.nMediator,sepproc=options.sepproc)
+    _helper.setModel(options.channel,options.svjgamma,options.mMediator,options.mDark,options.mPseudo,options.mVector,options.rinv,options.alpha,options.mPiOverLambda,options.lambdaHV,BRGamma=options.BRGamma,generate=None if options.scan else not options.madgraph,boost=options.boost,boostvar=options.boostvar,yukawa=options.yukawa,nMediator=options.nMediator,sepproc=options.sepproc)
