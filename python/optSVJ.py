@@ -28,6 +28,7 @@ options.register("mVector", 15.37, VarParsing.multiplicity.singleton, VarParsing
 options.register("BRtau", 0.5, VarParsing.multiplicity.singleton, VarParsing.varType.float)
 #new SVJGamma parameters
 options.register("BRGamma", 0.5, VarParsing.multiplicity.singleton, VarParsing.varType.float)
+options.register("ctauPion", 0.001, VarParsing.multiplicity.singleton, VarParsing.varType.float)
 ###################
 options.register("alpha", "peak", VarParsing.multiplicity.singleton, VarParsing.varType.string)
 options.register("yukawa", 1.0, VarParsing.multiplicity.singleton, VarParsing.varType.float)
@@ -97,4 +98,4 @@ if options.suep:
 else:
     print("selected signal: SVJGamma !")
     _helper = svjHelper(options.svjgamma)
-    _helper.setModel(options.channel,options.svjgamma,options.mMediator,options.mDark,options.mPseudo,options.mVector,options.rinv,options.alpha,options.mPiOverLambda,options.lambdaHV,BRGamma=options.BRGamma,generate=None if options.scan else not options.madgraph,boost=options.boost,boostvar=options.boostvar,yukawa=options.yukawa,nMediator=options.nMediator,sepproc=options.sepproc)
+    _helper.setModel(options.channel,options.svjgamma,options.mMediator,options.mDark,options.mPseudo,options.mVector,options.rinv,options.alpha,options.mPiOverLambda,options.lambdaHV,BRGamma=options.BRGamma,ctauPion=options.ctauPion,generate=None if options.scan else not options.madgraph,boost=options.boost,boostvar=options.boostvar,yukawa=options.yukawa,nMediator=options.nMediator,sepproc=options.sepproc)

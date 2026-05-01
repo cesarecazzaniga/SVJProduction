@@ -137,7 +137,7 @@ class jobSubmitterSVJ(jobSubmitter):
                 if self.suep:
                     self.helper.setModel(pdict["mMediator"],pdict["mDark"],pdict["temperature"],pdict["decay"])
                 if self.svjgamma:
-                    self.helper.setModel(channel=pdict["channel"],svjgamma=pdict["svjgamma"],mMediator=pdict["mMediator"],mDark=pdict["mDark"] if "mDark" in pdict else None,mPseudo=pdict["mPseudo"],mVector=pdict["mVector"],rinv=pdict["rinv"],alpha=pdict["alpha"],mPiOverLambda=pdict["mPiOverLambda"] if "mPiOverLambda" in pdict else None,lambdaHV=pdict["lambdaHV"] if "lambdaHV" in pdict else None, BRGamma=pdict["BRGamma"] if "BRGamma" in pdict else None ,boost=pdict["boost"] if "boost" in pdict else 0.0, boostvar=pdict["boostvar"] if "boostvar" in pdict else None, generate=not (self.madgraph or self.gridpack),yukawa=pdict["yukawa"] if "yukawa" in pdict else None, nMediator=pdict["nMediator"] if "nMediator" in pdict else None, sepproc=pdict["sepproc"] if "sepproc" in pdict else None )
+                    self.helper.setModel(channel=pdict["channel"],svjgamma=pdict["svjgamma"],mMediator=pdict["mMediator"],mDark=pdict["mDark"] if "mDark" in pdict else None,mPseudo=pdict["mPseudo"],mVector=pdict["mVector"],rinv=pdict["rinv"],alpha=pdict["alpha"],mPiOverLambda=pdict["mPiOverLambda"] if "mPiOverLambda" in pdict else None,lambdaHV=pdict["lambdaHV"] if "lambdaHV" in pdict else None, BRGamma=pdict["BRGamma"] if "BRGamma" in pdict else None, ctauPion=pdict["ctauPion"] if "ctauPion" in pdict else None, boost=pdict["boost"] if "boost" in pdict else 0.0, boostvar=pdict["boostvar"] if "boostvar" in pdict else None, generate=not (self.madgraph or self.gridpack),yukawa=pdict["yukawa"] if "yukawa" in pdict else None, nMediator=pdict["nMediator"] if "nMediator" in pdict else None, sepproc=pdict["sepproc"] if "sepproc" in pdict else None )
                 else:    
                     self.helper.setModel(channel=pdict["channel"],svjl=pdict["svjl"] if "svjl" in pdict else None, mMediator=pdict["mMediator"],mDark=pdict["mDark"],mPseudo=pdict["mPseudo"] if "mPseudo" in pdict else None,mVector=pdict["mVector"] if "mVector"in pdict else None,rinv=pdict["rinv"],alpha=pdict["alpha"],mPiOverLambda=pdict["mPiOverLambda"] if "mPiOverLambda" in pdict else None,lambdaHV=pdict["lambdaHV"] if "lambdaHV" in pdict else None,boost=pdict["boost"] if "boost" in pdict else 0.0, boostvar=pdict["boostvar"] if "boostvar" in pdict else None ,generate=not (self.madgraph or self.gridpack),yukawa=pdict["yukawa"] if "yukawa" in pdict else None, nMediator=pdict["nMediator"] if "nMediator" in pdict else None , sepproc=pdict["sepproc"] if "sepproc" in pdict else None )
                 outpre = self.outpre
@@ -193,6 +193,7 @@ class jobSubmitterSVJ(jobSubmitter):
                             "rinv="+str(pdict["rinv"]),
                             "lambdaHV="+str(pdict["lambdaHV"]),
                             "BRGamma="+str(pdict["BRGamma"]),
+                            "ctauPion="+str(pdict["ctauPion"]),
                             "alpha="+str(pdict["alpha"]),   
                         ]            
                         for extra in svj_extras+["filterZ2"]:

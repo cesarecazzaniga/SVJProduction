@@ -124,7 +124,7 @@ class svjHelper(object):
 
 
     # has to be "lambdaHV" because "lambda" is a keyword
-    def setModel(self,channel,svjgamma,mMediator,mDark,mPseudo,mVector,rinv,alpha,mPiOverLambda,lambdaHV,BRGamma=None,yukawa=None,generate=True,boost=0.,boostvar=None,nMediator=None,sepproc=True):
+    def setModel(self,channel,svjgamma,mMediator,mDark,mPseudo,mVector,rinv,alpha,mPiOverLambda,lambdaHV,BRGamma=None,ctauPion=None,yukawa=None,generate=True,boost=0.,boostvar=None,nMediator=None,sepproc=True):
         # check for issues
         if channel!="s" and channel!="t": raise ValueError("Unknown channel: "+channel)
         # store the basic parameters
@@ -140,10 +140,11 @@ class svjHelper(object):
         self.mVector = self.calcLatticePrediction(self.mPiOverLambda,self.mPseudo)
         self.rinv = rinv
         self.brGamma = BRGamma
-
+        self.ctauPion = ctauPion
         self.nMediator = None
         self.yukawa = None
         self.sepproc = sepproc
+        self.alpha = alpha
         # yukawa not used by pythia "t-channel" generation (only includes strong pair prod)
         # but will still be included in name if provided in model setting
         if self.channel=="t":
@@ -174,7 +175,7 @@ class svjHelper(object):
         self.xsec = self.getPythiaXsec(self.mMediator)
         self.mMin = self.mMediator-1
         self.mMax = self.mMediator+1
-        self.mSqua = self.lambdaHV + 0.2 # dark scalar quark mass (also used for pTminFSR)
+        self.mSqua = (0.5*(self.mPseudo + 3*self.mVector))/4.0
 
         # get limited set of quarks for decays (check mDark against quark masses, compute running)
         self.quarks_pseudo.set(self.mPseudo)
@@ -192,7 +193,9 @@ class svjHelper(object):
                 ("mMediator", "mMed-{:g}".format(self.mMediator)),
                 ("mDark", "mDark-{:g}".format(self.mPseudo)),
                 ("rinv", "rinv-{:g}".format(self.rinv)),
-                ("alpha", "alpha-{}".format(self.brGamma)),
+                ("brgamma", "brgamma-{}".format(self.brGamma)),
+                ("ctauPion", "ctauPion-{:g}".format(self.ctauPion)),
+                ("alpha", "alpha-{}".format(self.alpha)),
                 ])
                 if self.yukawa is not None: _outname += "_yukawa-{:g}".format(self.yukawa)
                 if self.boost>0: _outname += "_{}{:g}".format(self.boostvar.upper(),self.boost)
@@ -404,6 +407,8 @@ class svjHelper(object):
         lines_decay += self.pseudo_scalar_visibleDecay("ALPplusMassInsertion",4900111)
         lines_decay += self.invisibleDecay(4900211,51)
         lines_decay += self.pseudo_scalar_visibleDecay("ALPplusMassInsertion",4900211)
+        lines_hv += ['4900111:tau0 = {:g}'.format(self.ctauPion)] #assume input lifetime in mm
+        lines_hv += ['4900211:tau0 = {:g}'.format(self.ctauPion)] 
         
         if self.mPiOverLambda <= 1.5:
             #all vector mesons decays
