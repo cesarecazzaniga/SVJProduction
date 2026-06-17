@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: --eventcontent MINIAODSIM --datatier MINIAODSIM --fileout file:step0.root --conditions 140X_mcRun3_2024_realistic_v26 --step PAT --geometry DB:Extended --filein file:step-1.root --era Run3_2024 --no_exec --mc --python_filename SVJ/Production/python/2024/step_MiniAODv6.py --no_exec
+# with command line options: --eventcontent MINIAODSIM --datatier MINIAODSIM --fileout file:step0.root --conditions 140X_mcRun3_2024_realistic_v26 --step PAT --geometry DB:Extended --filein file:step-1.root --era Run3_2024 --no_exec --mc --python_filename SVJ/Production/python/2024/step_MINIAODv6.py --no_exec
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Eras.Era_Run3_2024_cff import Run3_2024
