@@ -93,7 +93,8 @@ if __name__=="__main__":
     predefined_chains = OrderedDict([
         ("P8v10",["GEN-SIM","DIGI","RECO","MINIAODv3","NANOAODv10"]),
         ("MGv10",["LHE-GEN-SIM","DIGI","RECO","MINIAODv3","NANOAODv10"]),
-        ("P8v11",["GEN-SIM","DIGI","RECO","MINIAODv3","NANOAODv11"]),
+        #("P8v11",["GEN-SIM","DIGI","RECO","MINIAODv3","NANOAODv11"]),
+        ("P8v11",["GEN-SIM","DIGI","RECO","MINIAODv6"]), #"NANOAODv15"
         ("MGv11",["LHE-GEN-SIM","DIGI","RECO","MINIAODv3","NANOAODv11"]),
         ("P8v12",["GEN-SIM","DIGI","RECO","MINIAODv4","NANOAODv12"]),
         ("MGv12",["LHE-GEN-SIM","DIGI","RECO","MINIAODv4","NANOAODv12"]),
@@ -158,12 +159,17 @@ if __name__=="__main__":
     env_keys = ["CMSSW_VERSION", "SCRAM_ARCH"]
     this_env = {key:os.getenv(key) for key in env_keys}
     step_versions = {
-        "2022": defaultdict(lambda: {"CMSSW_VERSION": "CMSSW_12_4_17"})
+        "2022": defaultdict(lambda: {"CMSSW_VERSION": "CMSSW_12_4_17"}),
+        "2024": defaultdict(lambda: {"CMSSW_VERSION": "CMSSW_14_0_21"}),
     }
     step_versions["2022"]["NANOAODv11"] = {"CMSSW_VERSION": "CMSSW_12_6_5"}
     step_versions["2022"]["MINIAODv4"] = {"CMSSW_VERSION": "CMSSW_13_0_13"}
     step_versions["2022"]["NANOAODv12"] = {"CMSSW_VERSION": "CMSSW_13_0_13"}
     step_versions["2022EE"] = deepcopy(step_versions["2022"])
+    step_versions["2024"]["NANOAODv15"] = {"CMSSW_VERSION": "CMSSW_14_0_21"}
+    step_versions["2024"]["MINIAODv6"] = {"CMSSW_VERSION": "CMSSW_14_0_21"}
+    
+
 
     # create and copy tarball for other CMSSW versions
     extra_tarballs = []
