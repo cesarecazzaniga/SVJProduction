@@ -174,12 +174,14 @@ if hasattr(process,'generator'):
         process.generator.maxEventsToPrint = options.printEvents
 
 if options.quiet and hasattr(process,'MessageLogger'):
-    for dest in process.MessageLogger.destinations:
-        dest_attr = getattr(process.MessageLogger,dest)
-        for level in ['INFO','WARNING']:
-            existing_pset = getattr(dest_attr,level,cms.untracked.PSet())
-            existing_pset.limit = cms.untracked.int32(0)
-            setattr(dest_attr,level,existing_pset)
+    #check if MessageLogger has destinations attribute, otherwise skip this step
+    if hasattr(process.MessageLogger,'destinations'):
+        for dest in process.MessageLogger.destinations:
+            dest_attr = getattr(process.MessageLogger,dest)
+            for level in ['INFO','WARNING']:
+                existing_pset = getattr(dest_attr,level,cms.untracked.PSet())
+                existing_pset.limit = cms.untracked.int32(0)
+                setattr(dest_attr,level,existing_pset)
 
 # genjet/met settings - treat DM stand-ins as invisible
 _particles = ["genParticlesForJetsNoMuNoNu","genParticlesForJetsNoNu","genCandidatesForMET","genParticlesForMETAllVisible"]
@@ -224,10 +226,12 @@ if hasattr(process,'genJetParticles') and hasattr(process,'genParticlesForJetsNo
 # DIGI settings
 if hasattr(process,"mixData"):
     if options.year.startswith("2022"): puname = "Neutrino_E-10_gun_Run3Summer21PrePremix-Summer22_124X_mcRun3_2022_realistic_v11-v2_PREMIX.pkl"
+    if options.year.startswith("2024"): puname = "Neutrino_E-10_gun_RunIIISummer24PrePremix-Premixlib2024_140X_mcRun3_2024_realistic_v26-v1_PREMIX.pkl" # using 2022 premix for 2024 since 2024 premix not available yet
     else: raise ValueError("Unknown premix dataset for year {}".format(options.year))
     if not os.path.isfile(puname):
         print("retrieving "+puname)
-        os.system("xrdcp -f root://cmseos.fnal.gov//store/user/pedrok/SVJ2017/pileup/"+puname+" .")
+        #os.system("xrdcp -f root://cmseos.fnal.gov//store/user/pedrok/SVJ2017/pileup/"+puname+" .")
+        os.system("xrdcp -f root://storage01.lcg.cscs.ch:1096//pnfs/lcg.cscs.ch/cms/trivcat/store/user/cazzanig/pu_files_run3/" + puname+" .")
         if not os.path.isfile(puname):
             raise Exception("Could not retrieve pileup input list.")
     import pickle
