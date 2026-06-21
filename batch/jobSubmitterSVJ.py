@@ -47,6 +47,7 @@ class jobSubmitterSVJ(jobSubmitter):
         parser.add_option("--gridpack", dest="gridpack", default=False, action="store_true", help="gridpack production (default = %default)")
         parser.add_option("--madgraph", dest="madgraph", default=False, action="store_true", help="sample generated w/ madgraph (rather than pythia) (default = %default)")
         parser.add_option("--model", dest="model", default="svj", choices=["svj","suep","emj"], help="model to simulate (default = %default)")
+        parser.add_option("--svjgamma", dest="svjgamma", default=False, action="store_true", help="run SVJGamma simulation (default = %default)")
         parser.add_option("-A", "--args", dest="args", default="", help="additional common args to use for all jobs (default = %default)")
         parser.add_option("-v", "--verbose", dest="verbose", default=False, action="store_true", help="enable verbose output (default = %default)")
         parser.add_option("--chain-name", dest="chainName", default="", help="value for job.chainName (default = %default)")
@@ -140,12 +141,15 @@ class jobSubmitterSVJ(jobSubmitter):
                 signal = False
             else:
                 if self.model=="svj":
-                    model_args = [pdict["channel"],pdict["mMediator"],pdict["mDark"],pdict["rinv"],pdict["alpha"]]
-                    model_kwargs = {}
-                    for key in svj_extras:
-                        if key in pdict: model_kwargs[key] = pdict[key]
-                    model_kwargs["generate"] = not (self.madgraph or self.gridpack)
-                    self.helper.setModel(*model_args,**model_kwargs)
+                    if self.svjgamma:
+                        self.helper.setModel(channel=pdict["channel"],svjgamma=pdict["svjgamma"],mMediator=pdict["mMediator"],mDark=pdict["mDark"] if "mDark" in pdict else None,mPseudo=pdict["mPseudo"],mVector=pdict["mVector"],rinv=pdict["rinv"],alpha=pdict["alpha"],mPiOverLambda=pdict["mPiOverLambda"] if "mPiOverLambda" in pdict else None,lambdaHV=pdict["lambdaHV"] if "lambdaHV" in pdict else None, BRGamma=pdict["BRGamma"] if "BRGamma" in pdict else None, ctauPion=pdict["ctauPion"] if "ctauPion" in pdict else None, boost=pdict["boost"] if "boost" in pdict else 0.0, boostvar=pdict["boostvar"] if "boostvar" in pdict else None, generate=not (self.madgraph or self.gridpack),yukawa=pdict["yukawa"] if "yukawa" in pdict else None, nMediator=pdict["nMediator"] if "nMediator" in pdict else None, sepproc=pdict["sepproc"] if "sepproc" in pdict else None )
+                    else:
+                        model_args = [pdict["channel"],pdict["mMediator"],pdict["mDark"],pdict["rinv"],pdict["alpha"]]
+                        model_kwargs = {}
+                        for key in svj_extras:
+                            if key in pdict: model_kwargs[key] = pdict[key]
+                        model_kwargs["generate"] = not (self.madgraph or self.gridpack)
+                        self.helper.setModel(*model_args,**model_kwargs)
                 elif self.model=="suep":
                     self.helper.setModel(pdict["channel"],pdict["mMediator"],pdict["mDark"],pdict["temperature"],pdict["decay"])
                 elif self.model=="emj":
@@ -184,14 +188,30 @@ class jobSubmitterSVJ(jobSubmitter):
                             "scan="+str(pdict["scan"]),
                         ]
                     elif self.model=="svj":
-                        arglist = [
+                        if self.svjgamma:
+                            arglist = [
                             "model=svj",
-                            "channel="+str(pdict["channel"]),
+                            "channel="+str(pdict["channel"]),                                                                                                                                                                        
+                            "svjgamma=1",
                             "mMediator="+str(pdict["mMediator"]),
-                            "mDark="+str(pdict["mDark"]),
+                            "mPseudo="+str(pdict["mPseudo"]), 
+                            "mVector="+str(pdict["mVector"]),
                             "rinv="+str(pdict["rinv"]),
-                            "alpha="+str(pdict["alpha"]),
-                        ]
+                            "lambdaHV="+str(pdict["lambdaHV"]),
+                            "mPiOverLambda="+str(pdict["mPiOverLambda"]),
+                            "BRGamma="+str(pdict["BRGamma"]),
+                            "ctauPion="+str(pdict["ctauPion"]),
+                            "alpha="+str(pdict["alpha"]),   
+                        ] 
+                        else:
+                            arglist = [
+                                "model=svj",
+                                "channel="+str(pdict["channel"]),
+                                "mMediator="+str(pdict["mMediator"]),
+                                "mDark="+str(pdict["mDark"]),
+                                "rinv="+str(pdict["rinv"]),
+                                "alpha="+str(pdict["alpha"]),
+                            ]
                         for extra in svj_extras+["filterZ2"]:
                             if extra in pdict: arglist.append("{}={}".format(extra,str(pdict[extra])))
                     elif self.model=="suep":
