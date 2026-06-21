@@ -52,6 +52,14 @@ options.register("tmi", False, VarParsing.multiplicity.singleton, VarParsing.var
 options.register("dump", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
 options.register("content", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
 options.register("dryrun", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
+#new SVJGamma parameters
+options.register("mPiOverLambda", 1.6, VarParsing.multiplicity.singleton, VarParsing.varType.float)
+options.register("lambdaHV", 5.0, VarParsing.multiplicity.singleton, VarParsing.varType.float)
+options.register("mPseudo", 8.0, VarParsing.multiplicity.singleton, VarParsing.varType.float)
+options.register("mVector", 15.37, VarParsing.multiplicity.singleton, VarParsing.varType.float)
+options.register("svjgamma", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
+options.register("BRGamma", 0.5, VarParsing.multiplicity.singleton, VarParsing.varType.float)
+options.register("ctauPion", 0.001, VarParsing.multiplicity.singleton, VarParsing.varType.float)
 options.parseArguments()
 
 # safety checks to handle multiple years
@@ -87,8 +95,11 @@ elif len(options.fragment)>0:
     if len(options.inpre)>0: options.inpre += "_"+options.fragment
 
 if options.model=="svj":
-    _helper = svjHelper()
-    _helper.setModel(options.channel,options.mMediator,options.mDark,options.rinv,options.alpha,generate=None if options.scan else not options.madgraph,boost=options.boost,boostvar=options.boostvar,yukawa=options.yukawa,nMediator=options.nMediator,sepproc=options.sepproc)
+    #_helper = svjHelper()
+    #_helper.setModel(options.channel,options.mMediator,options.mDark,options.rinv,options.alpha,generate=None if options.scan else not options.madgraph,boost=options.boost,boostvar=options.boostvar,yukawa=options.yukawa,nMediator=options.nMediator,sepproc=options.sepproc)
+    print("selected signal: SVJGamma !")
+    _helper = svjHelper(options.svjgamma)
+    _helper.setModel(options.channel,options.svjgamma,options.mMediator,options.mDark,options.mPseudo,options.mVector,options.rinv,options.alpha,options.mPiOverLambda,options.lambdaHV,BRGamma=options.BRGamma,ctauPion=options.ctauPion,generate=None if options.scan else not options.madgraph,boost=options.boost,boostvar=options.boostvar,yukawa=options.yukawa,nMediator=options.nMediator,sepproc=options.sepproc)
 elif options.model=="suep":
     # change default
     if options.channel=='s': options.channel = 'ggH'
