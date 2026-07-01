@@ -282,10 +282,17 @@ class svjHelper(object):
                decay_prod_1 = 4900111
                decay_prod_2 = 4900211
         # lines for decays to quarks                                                                                                                              
-        lines_rho_to_pipi = [
-             '{:d}:mayDecay=on'.format(mesonID),
-             '{:d}:oneChannel = 1 {:g} 91 {:d} -{:d}'.format(mesonID,br,decay_prod_1,decay_prod_2),
-        ]
+        if (mesonID == 4900113):
+
+            lines_rho_to_pipi = [
+                 '{:d}:mayDecay=on'.format(mesonID),
+                 '{:d}:oneChannel = 1 {:g} 2 {:d} -{:d}'.format(mesonID,br,decay_prod_1,decay_prod_2),
+            ]
+        else:
+            lines_rho_to_pipi = [
+                 '{:d}:mayDecay=on'.format(mesonID),
+                 '{:d}:oneChannel = 1 {:g} 2 {:d} {:d}'.format(mesonID,br,decay_prod_1,decay_prod_2),
+            ]
         
         # lines for decays to leptons                                                                                                                              
         return lines_rho_to_pipi
@@ -293,6 +300,12 @@ class svjHelper(object):
 
     def getPythiaSettings(self):
         # todo: include safety/sanity checks
+
+        lines_displ = [
+            'ParticleDecays:xyMax = 30000',    # in mm/c
+            'ParticleDecays:zMax = 30000',    # in mm/c
+            'ParticleDecays:limitCylinder = on',    # yes
+        ]
 
         lines_schan = [
             # parameters for leptophobic Z'
@@ -407,8 +420,8 @@ class svjHelper(object):
         lines_decay += self.pseudo_scalar_visibleDecay("ALPplusMassInsertion",4900111)
         lines_decay += self.invisibleDecay(4900211,51)
         lines_decay += self.pseudo_scalar_visibleDecay("ALPplusMassInsertion",4900211)
-        lines_hv += ['4900111:tau0 = {:g}'.format(self.ctauPion)] #assume input lifetime in mm
-        lines_hv += ['4900211:tau0 = {:g}'.format(self.ctauPion)] 
+        lines_decay += ['4900111:tau0 = {:g}'.format(self.ctauPion)] #assume input lifetime in mm
+        lines_decay += ['4900211:tau0 = {:g}'.format(self.ctauPion)] 
         
         if self.mPiOverLambda <= 1.5:
             #all vector mesons decays
@@ -422,8 +435,12 @@ class svjHelper(object):
         
 
         lines = []
-        if self.channel=="s": lines = lines_schan + lines_decay
-        elif self.channel=="t": lines = lines_tchan + lines_decay
+        if self.channel=="s": lines = lines_displ + lines_schan + lines_decay
+        elif self.channel=="t": lines = lines_displ + lines_tchan + lines_decay
+
+        print("Pythia settings:")
+        for line in lines:
+            print(line)
 
         return lines
 
