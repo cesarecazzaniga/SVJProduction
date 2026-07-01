@@ -299,7 +299,13 @@ class svjHelper(object):
 
 
     def getPythiaSettings(self):
-        # todo: include safety/sanity checks
+       
+        lines_displ = [
+            'ParticleDecays:xyMax = 30000',    # in mm/c
+            'ParticleDecays:zMax = 30000',    # in mm/c
+            'ParticleDecays:limitCylinder = on',    # yes
+        ]
+
 
         lines_schan = [
             # parameters for leptophobic Z'
@@ -429,8 +435,8 @@ class svjHelper(object):
         
 
         lines = []
-        if self.channel=="s": lines = lines_schan + lines_decay
-        elif self.channel=="t": lines = lines_tchan + lines_decay
+        if self.channel=="s": lines = lines_displ+ lines_schan + lines_decay
+        elif self.channel=="t": lines = lines_displ + lines_tchan + lines_decay
 
         print("Pythia settings:")
         for line in lines:
