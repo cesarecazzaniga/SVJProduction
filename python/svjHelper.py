@@ -301,9 +301,8 @@ class svjHelper(object):
     def getPythiaSettings(self):
        
         lines_displ = [
-            'ParticleDecays:xyMax = 30000',    # in mm/c
-            'ParticleDecays:zMax = 30000',    # in mm/c
-            'ParticleDecays:limitCylinder = on',    # yes
+            'ParticleDecays:limitTau0 = off',
+            'ParticleDecays:tau0Max = 1e30'
         ]
 
 
