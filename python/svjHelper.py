@@ -302,9 +302,8 @@ class svjHelper(object):
         # todo: include safety/sanity checks
 
         lines_displ = [
-            'ParticleDecays:xyMax = 30000',    # in mm/c
-            'ParticleDecays:zMax = 30000',    # in mm/c
-            'ParticleDecays:limitCylinder = on',    # yes
+            'ParticleDecays:limitTau0 = off',
+            'ParticleDecays:tau0Max = 1e30'
         ]
 
         lines_schan = [
