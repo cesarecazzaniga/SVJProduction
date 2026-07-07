@@ -303,7 +303,7 @@ class svjHelper(object):
 
         lines_displ = [
             'ParticleDecays:limitTau0 = off',
-            'ParticleDecays:tau0Max = 1e30'
+            'ParticleDecays:tau0Max = 1e30',
         ]
 
         lines_schan = [
